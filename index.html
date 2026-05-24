@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="slike/djurdja.png" type="image/png">
+  <title>S tobom se igraju Đurđa i Đuro!</title>
+  <style>
+    @font-face {
+      font-family: 'omotype';
+      src:
+        url('fontovi/omotype.woff2') format('woff2'),
+        url('fontovi/omotype.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'OpenDyslexic';
+      src:
+        url('fontovi/OpenDyslexic.woff2') format('woff2'),
+        url('fontovi/OpenDyslexic.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'APL386';
+      src:
+        url('fontovi/APL386.woff2') format('woff2'),
+        url('fontovi/APL386.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Atkinson';
+      src:
+        url('fontovi/Atkinson.woff2') format('woff2'),
+        url('fontovi/Atkinson.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Lexend';
+      src:
+        url('fontovi/Lexend.woff2') format('woff2'),
+        url('fontovi/Lexend.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+    }	
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'omotype', sans-serif;
+      background: linear-gradient(180deg, #fdf6e3, #d6f5ff);
+      min-height: 100vh;
+      overflow: hidden;
+      color: #333;
+      position: relative;
+    }
+    .ekran {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+      padding: 24px;
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: translateX(100vw);
+      transition:
+        transform 0.5s ease,
+        opacity 0.5s ease;
+    }
+    .ekran.exit-left {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    .ekran.active {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      opacity: 1;
+      transform: translateX(0);
+      z-index: 2;
+    }
+    h1 {
+      font-size: 2.5rem;
+      text-align: center;
+    }
+    p {
+      font-size: 1.1rem;
+      text-align: center;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+    .glavnaSlika {
+      width: min(160vw, 640px);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      user-select: none;
+    }
+    .botunZaSliku {
+      width: minmax(20vw, 80px);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      user-select: none;
+    }	
+    .glavnaSlika:hover {
+      transform: scale(1.05);
+    }
+    .glavnaSlika:active {
+      transform: scale(0.95) rotate(-2deg);
+    }
+    .kosturZaKarticu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      width: min(900px, 100%);
+    }
+    .kartica {
+      background: white;
+      border-radius: 24px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+      border: 4px solid transparent;
+    }
+    .kartica:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.12);
+    }
+    .kartica.selected {
+      border-color: #4ecdc4;
+    }
+    .kartica h2 {
+      margin-bottom: 12px;
+      font-size: 1.4rem;
+    }
+    .kartica p {
+      font-size: 0.95rem;
+    }
+    .promjenaFonta {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: white;
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10;
+    }
+    .promjenaFonta label {
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+    select {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 2px solid #ccc;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .botunZaIgru {
+      background: #ffcf56;
+      border: none;
+      border-radius: 20px;
+      padding: 18px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      font-family: inherit;
+    }
+    .botunZaIgru:hover {
+      transform: scale(1.03);
+    }
+    .botunZaNazad {
+      font-family: inherit;
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      border: none;
+      background: white;
+      padding: 12px 18px;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+      font-size: 1rem;
+    }
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .promjenaFonta {
+        width: calc(100% - 32px);
+        left: 16px;
+        right: 16px;
+      }
+      .ekran.active {
+        padding-top: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section id="pocetniEkran" class="ekran active">
+    <h1>S tobom se igraju Đurđa i Đuro!</h1> 
+    <img
+      class="glavnaSlika"
+      src="slike/naslovna.png"
+      alt="Početak igre"
+      onclick="idiNaEkran('fontovi')"
+    />
+    <h2>
+      Klikni na sliku za početak avanture
+    </h2>
+  </section>
+  <section id="fontovi" class="ekran">
+    <button class="botunZaNazad" onclick="idiNaEkran('pocetniEkran', 'back')">
+      ← Natrag
+    </button>
+    <h1>Odaberi slova koja možeš najlakše čitati &#128522</h1>
+    <div class="kosturZaKarticu">
+      <div class="kartica" onclick="odaberiFont('omotype', this)">
+        <h2 style="font-family: 'omotype', sans-serif;">
+          Omotype
+        </h2>
+        <p style="font-family: 'omotype', sans-serif;">
+          Odaberi slova koja možeš najlakše čitati &#128522
+        </p>
+      </div>
+      <div class="kartica" onclick="odaberiFont('OpenDyslexic', this)">
+        <h2 style="font-family: 'OpenDyslexic', sans-serif;">
+          OpenDyslexic
+        </h2>
+        <p style="font-family: 'OpenDyslexic', sans-serif;">
+          Odaberi slova koja možeš najlakše čitati &#128522
+        </p>
+      </div>
+      <div class="kartica" onclick="odaberiFont('APL386', this)">
+        <h2 style="font-family: 'APL386', sans-serif;">APL386</h2>
+        <p style="font-family: 'APL386', sans-serif;">
+          Odaberi slova koja možeš najlakše čitati &#128522
+        </p>
+      </div>
+    </div>
+	<div class="kosturZaKarticu">
+      <div class="kartica" onclick="odaberiFont('Atkinson', this)">
+        <h2 style="font-family: 'Atkinson', sans-serif;">
+          Atkinson
+        </h2>
+        <p style="font-family: 'Atkinson', sans-serif;">
+          Odaberi slova koja možeš najlakše čitati &#128522
+        </p>
+      </div>
+      <div class="kartica" onclick="odaberiFont('Lexend', this)">
+        <h2 style="font-family: 'Lexend', sans-serif;">Lexend</h2>
+        <p style="font-family: 'Lexend', sans-serif;">
+          Odaberi slova koja možeš najlakše čitati &#128522
+        </p>
+      </div>
+    </div>
+    <button class="botunZaIgru" onclick="idiNaIgre()">
+      <h2>Nastavi na igre</h2>
+    </button>
+  </section>
+  <section id="ekranZaIzbor" class="ekran">
+    <div class="promjenaFonta">
+      <label for="izbornikZaFont">Promijeni slova</label>
+
+      <select id="izbornikZaFont" onchange="promijeniFont(this.value)">
+        <option value="omotype">Omotype</option>
+        <option value="OpenDyslexic">OpenDyslexic</option>
+        <option value="APL386">APL386</option>
+        <option value="Atkinson">Atkinson</option>
+        <option value="Lexend">Lexend</option>
+      </select>
+    </div>
+    <button class="botunZaNazad" onclick="idiNaEkran('fontovi', 'back')">
+      ← Natrag
+    </button>
+    <br>
+    <div class="kosturZaKarticu">
+      <a href="stranice/nestima1.html" target="_blank"><button class="botunZaIgru">
+		<img class="botunZaSliku" src="slike/nestima.png" alt="Početak igre" />
+		<br> Što ne štima<br>na slici?<br></button></a>
+      <a href="stranice/razl1.html" target="_blank"><button class="botunZaIgru">
+		<img class="botunZaSliku" src="slike/razlike.png" alt="Početak igre" />
+		<br>Pronađi<br>razlike<br></button></a>
+      <a href="stranice/djdj.html" target="_blank"><button class="botunZaIgru"> 
+		<img class="botunZaSliku" src="slike/gdje-su.png" alt="Početak igre" />
+		<br>Pronađi<br>Đurđu i Đuru<br></button></a>
+    </div>
+  </section>
+  <script>
+   localStorage.clear();
+	
+   let trenutniFont = localStorage.getItem('odabraniFont') || 'omotype';
+
+    document.body.style.fontFamily = `'${trenutniFont}', sans-serif`;
+
+   function odaberiFont(nazivFonta, element) {
+      trenutniFont = nazivFonta;
+
+      document.body.style.fontFamily = `'${nazivFonta}', sans-serif`;
+
+      localStorage.setItem('odabraniFont', nazivFonta);
+
+      document.querySelectorAll('.kartica').forEach(card => {
+        card.classList.remove('selected');
+      });
+
+      element.classList.add('selected');
+
+      document.getElementById('izbornikZaFont').value = nazivFonta;
+    }
+
+    function promijeniFont(nazivFonta) {
+      trenutniFont = nazivFonta;
+
+      document.body.style.fontFamily = `'${nazivFonta}', sans-serif`;
+
+      localStorage.setItem('odabraniFont', nazivFonta);
+    }
+    function idiNaEkran(ekranId, direction = 'forward') {
+      const trenutniEkran = document.querySelector('.ekran.active');
+      const sljedeciEkran = document.getElementById(ekranId);
+
+      if (trenutniEkran === sljedeciEkran) return;
+
+      const enteringFrom = direction === 'back'
+        ? '-100vw'
+        : '100vw';
+
+      const leavingTo = direction === 'back'
+        ? '100vw'
+        : '-100vw';
+
+      sljedeciEkran.classList.remove('exit-left');
+      sljedeciEkran.style.transition = 'none';
+      sljedeciEkran.style.transform = `translateX(${enteringFrom})`;
+      sljedeciEkran.style.opacity = '1';
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          sljedeciEkran.style.transition = 'transform 0.55s ease, opacity 0.55s ease';
+          sljedeciEkran.classList.add('active');
+          sljedeciEkran.style.transform = 'translateX(0)';
+        });
+      });
+
+      if (trenutniEkran) {
+        trenutniEkran.style.transition = 'transform 0.55s ease, opacity 0.55s ease';
+        trenutniEkran.style.transform = `translateX(${leavingTo})`;
+        trenutniEkran.style.opacity = '0';
+
+        setTimeout(() => {
+          trenutniEkran.classList.remove('active');
+          trenutniEkran.style.transform = 'translateX(100vw)';
+        }, 550);
+      }
+    }
+
+    function idiNaIgre() {
+      idiNaEkran('ekranZaIzbor');
+    }
+	
+    window.onload = () => {
+      document.body.style.fontFamily = `'${trenutniFont}', sans-serif`;
+
+      const selector = document.getElementById('izbornikZaFont');
+
+      if (selector) {
+        selector.value = trenutniFont;
+      }
+    };
+  </script>
+</body>
+</html>

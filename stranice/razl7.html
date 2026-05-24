@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../slike/djurdja.png" type="image/png">
+  <link rel="stylesheet" href="css.css">
+  <title>S tobom se igraju Đurđa i Đuro!</title>
+</head>
+<body>
+	<script>
+	  window.history.scrollRestoration = 'manual';
+	  window.onload = function() {
+		window.scrollTo(0, 0);
+	  };
+	</script>
+
+    <div class="promjenaFonta">
+      <label for="izbornikZaFont">Promijeni slova</label>
+
+      <select id="izbornikZaFont" onchange="promijeniFont(this.value)">
+        <option value="OpenDyslexic">OpenDyslexic</option>
+        <option value="omotype">Omotype</option>
+        <option value="APL386">APL386</option>
+        <option value="Lexend">Lexend</option>
+        <option value="Atkinson">Atkinson</option>
+      </select>
+    </div>
+
+    <button class="botunZaNazad" onclick="window.close()">
+      ← Natrag
+    </button>
+	<center>
+	<br>
+     <h1>🔍 Pronađi jednu razliku &#128513;</h1><br>
+
+    <div style="position: relative; max-width: 100%; overflow: auto; border-radius: 24px; box-shadow: 0 12px 24px rgba(0,0,0,0.15);" >
+
+      <img
+		class="bo"
+        src="../slike/pula.jpg"
+        usemap="#djuro-map"
+        alt="Pronađi razliku!"
+        style="width: min(95vw, 900px); display: block;"
+      />
+
+      <map name="djuro-map">
+        <area
+          shape="rect"
+          coords="40,2305,144,2403"
+          href="javascript:void(0);"
+          onclick="pronadjeni()"
+		  class="yaay"
+        >
+      </map>
+	  <br>
+    </div>
+
+    <div id="porukaBravo" style="display:none; margin-top: 20px; background: #fff3b0; padding: 18px 24px; border-radius: 20px; font-size: 1.3rem; box-shadow: 0 8px 18px rgba(0,0,0,0.1);">
+      🎉 Bravo, to je to! &#127881<br><br><a href="razl8.html"><img src="../slike/ezgif-799580006e326782.gif"></a><br><br>
+    </div>
+
+<script>
+   let trenutniFont = localStorage.getItem('odabraniFont') || 'omotype';
+
+    document.body.style.fontFamily = `'${trenutniFont}', sans-serif`;
+
+   function odaberiFont(nazivFonta, element) {
+      trenutniFont = nazivFonta;
+
+      document.body.style.fontFamily = `'${nazivFonta}', sans-serif`;
+
+      localStorage.setItem('odabraniFont', nazivFonta);
+
+      document.querySelectorAll('.kartica').forEach(card => {
+        card.classList.remove('selected');
+      });
+
+      element.classList.add('selected');
+
+      document.getElementById('izbornikZaFont').value = nazivFonta;
+    }
+
+    function promijeniFont(nazivFonta) {
+      trenutniFont = nazivFonta;
+
+      document.body.style.fontFamily = `'${nazivFonta}', sans-serif`;
+
+      localStorage.setItem('odabraniFont', nazivFonta);
+    }
+
+    window.onload = () => {
+      document.body.style.fontFamily = `'${trenutniFont}', sans-serif`;
+
+      const selector = document.getElementById('izbornikZaFont');
+
+      if (selector) {
+        selector.value = trenutniFont;
+      }
+    };	
+	
+	const djuroAudio = new Audio('../pjesmice/Pu-Velicanstveni_vali.mp3');
+
+	function pronadjeni() {
+	  const message = document.getElementById('porukaBravo');
+	  message.style.display = 'block';
+	  
+	  message.scrollIntoView({ behavior: 'smooth', block: 'end' });
+	  
+	  djuroAudio.play().catch(error => {
+		console.log("Audio je blokiran.", error);
+		
+	  });
+	}
+
+</script>
+
+
+</body>
+</html>
