@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../slike/djurdja.png" type="image/png">
+  <link rel="stylesheet" href="css.css">
+  <title>S tobom se igraju Đurđa i Đuro!</title>
+
+  <style>	
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'omotype', sans-serif;
+      background: linear-gradient(180deg, #fdf6e3, #d6f5ff);
+      min-height: 100vh;
+      overflow: hidden;
+      color: #333;
+      position: relative;
+    }
+    .ekran {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+      padding: 24px;
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: translateX(100vw);
+      transition:
+        transform 0.5s ease,
+        opacity 0.5s ease;
+    }
+    .ekran.exit-left {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    .ekran.active {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      opacity: 1;
+      transform: translateX(0);
+      z-index: 2;
+    }
+    h1 {
+      font-size: 2.5rem;
+      text-align: center;
+    }
+    p {
+      font-size: 1.1rem;
+      text-align: center;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+    .botunZaSliku {
+      width: max(25vw, 100px);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      user-select: none;
+    }	
+    .botunZaIgru {
+      background: #ffcf56;
+      border: none;
+      border-radius: 20px;
+      padding: 18px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      font-family: inherit;
+    }
+    .botunZaIgru:hover {
+      transform: scale(1.03);
+    }
+    .botunZaNazad {
+      font-family: inherit;
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      border: none;
+      background: white;
+      padding: 12px 18px;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+      font-size: 1rem;
+    }
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .promjenaFonta {
+        width: calc(100% - 32px);
+        left: 16px;
+        right: 16px;
+      }
+      .ekran.active {
+        padding-top: 100px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+    <div>    
+	  <center>
+	  <button class="botunZaNazad" onclick="window.close()">
+        ← Natrag
+      </button>
+      <br>
+      <a href="#" onclick="pronadjeni1()"><button class="botunZaIgru">
+		<img class="botunZaSliku" src="../slike/kuha.jpg" alt="Svira pjesmicu" /><br>Pokreni pjesmicu!
+		</button></a>
+      <a href="#" onclick="pronadjeni2()"><button class="botunZaIgru">
+		<img class="botunZaSliku" src="../slike/zirafa.png" alt="Svira pjesmicu" /><br>Pokreni pjesmicu!
+		</button></a>
+      <a href="#" onclick="pronadjeni3()"><button class="botunZaIgru"> 
+		<img class="botunZaSliku" src="../slike/djakovo.jpg" alt="Svira pjesmicu" /><br>Pokreni pjesmicu!
+		</button></a>
+    </div>
+<script>
+	
+const djuroAudio1 = new Audio('../pjesmice/djurin_neobican_rucak.mp3');
+
+function pronadjeni1() {
+  if (!djuroAudio1.paused) {
+    djuroAudio1.pause();         
+    djuroAudio1.currentTime = 0;  
+  } else {
+    djuroAudio1.play().catch(error => {
+      console.log("Blokiran audio", error);
+    });
+  }
+}
+	
+const djuroAudio2 = new Audio('../pjesmice/zirafa_na_Korzu.mp3');
+
+function pronadjeni2() {
+  if (!djuroAudio2.paused) {
+    djuroAudio2.pause();         
+    djuroAudio2.currentTime = 0;  
+  } else {
+    djuroAudio2.play().catch(error => {
+      console.log("Blokiran audio", error);
+    });
+  }
+}
+	
+const djuroAudio3 = new Audio('../pjesmice/djakovo_na_dva_kotaca.mp3');
+
+function pronadjeni3() {
+  if (!djuroAudio3.paused) {
+    djuroAudio3.pause();         
+    djuroAudio3.currentTime = 0;  
+  } else {
+    djuroAudio3.play().catch(error => {
+      console.log("Blokiran audio", error);
+    });
+  }
+}
+
+
+</script>
+
+
+</body>
+</html>
